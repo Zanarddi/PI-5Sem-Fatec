@@ -64,17 +64,22 @@ void sendInfo(int state1, int state2)
   httpClient.end();
 }
 
-int validateSensor(int state, int distance){
-  if(distance == 0){
+int validateSensor(int state, int distance)
+{
+  if (distance == 0)
+  {
     return STATE_INVALID;
   }
-  else if(distance <= DISTANCE_MAX){
+  else if (distance <= DISTANCE_MAX)
+  {
     return STATE_OCCUPIED;
   }
-  else if(distance > DISTANCE_MAX){
+  else if (distance > DISTANCE_MAX)
+  {
     return STATE_EMPTY;
   }
-  else{
+  else
+  {
     return STATE_INVALID;
   }
 }
@@ -104,12 +109,15 @@ void loop()
   distance1 = sonar1.ping_cm();
   // distance2 = sonar2.ping_cm();
 
-  if (distance1 <= DISTANCE_MAX && distance1 > 0){
-    if(state1 == STATE_OCCUPIED){
+  if (distance1 <= DISTANCE_MAX && distance1 > 0)
+  {
+    if (state1 == STATE_OCCUPIED)
+    {
       state1 = STATE_OCCUPIED;
     }
   }
-  else{
+  else
+  {
     state1 = validateSensor(state1, distance1);
   }
 
@@ -121,7 +129,6 @@ void loop()
   // else{
   //   state2 = validateSensor(state2, distance2);
   // }
-
 
   sendInfo(state1, state2);
 
