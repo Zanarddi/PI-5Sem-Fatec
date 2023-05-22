@@ -2,6 +2,8 @@
 #include <HTTPClient.h>
 #include <NewPing.h>
 
+#define WAIT_TIME_LOOP 50000
+#define WAIT_TIME_SENSOR 10000
 #define STATE_INVALID -1
 #define STATE_EMPTY 0
 #define STATE_OCCUPIED 1
@@ -97,7 +99,7 @@ void loop()
   // Serial.println(String("{ sensor_2: ") + distance2 + String("}"));
   // Serial.println(String("-----"));
 
-  delay(10000);
+  delay(WAIT_TIME_SENSOR);
 
   distance1 = sonar1.ping_cm();
   // distance2 = sonar2.ping_cm();
@@ -123,5 +125,5 @@ void loop()
 
   sendInfo(state1, state2);
 
-  delay(60000);
+  delay(WAIT_TIME_LOOP);
 }
