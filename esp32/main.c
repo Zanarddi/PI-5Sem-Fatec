@@ -17,9 +17,9 @@ NewPing sonar1(TRIG_PIN_1, ECHO_PIN_1);
 // NewPing sonar2(TRIG_PIN_2, ECHO_PIN_2);
 
 const char *deviceId = "*****";
-const char *ssid_Router = "****";
-const char *password_Router = "****";
-const char *apiEndpoint = "****";
+const char *ssid_Router = "*****";
+const char *password_Router = "*****";
+const char *apiEndpoint = "http://***.***.***.***:3000/iot/sensor";
 
 HTTPClient httpClient;
 WiFiClient wifiClient;
@@ -36,7 +36,7 @@ void setup()
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
-    Serial.print("Connecting to Wifi...");
+    Serial.println("Connecting to Wifi...");
   }
   Serial.println("\nConnected, IP address: ");
   Serial.println(WiFi.localIP());
@@ -48,7 +48,7 @@ void sendInfo(int state1, int state2)
 {
   httpClient.begin(wifiClient, apiEndpoint);
 
-  // httpClient.addHeader("Content-Type", "application/json");
+  httpClient.addHeader("Content-Type", "application/json");
 
   String requestBody = "{\"device_id\":\"" + String(deviceId) + "\",\"states\":[" + state1 + "," + state2 + "]}";
   Serial.println(requestBody);
