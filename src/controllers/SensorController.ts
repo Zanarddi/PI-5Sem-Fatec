@@ -49,7 +49,6 @@ export class SensorController {
         console.log(`Sensor ${sensor.getId()} not updated`);
       }
     });
-
-    return res.status(200).send(JSON.stringify(tmpSensors[0]));
+    return res.status(200).send(JSON.stringify(tmpSensors));
   }
 }
