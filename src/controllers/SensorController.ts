@@ -50,6 +50,6 @@ export class SensorController {
       }
     });
 
-    return res.status(200).send(JSON.stringify(tmpSensors));
+    return res.status(200).send(JSON.stringify(tmpSensors[0]));
   }
 }
