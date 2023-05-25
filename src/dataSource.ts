@@ -1,4 +1,3 @@
-import { parse } from "path";
 import { DataSource } from "typeorm";
 
 export const appDataSource = new DataSource({
