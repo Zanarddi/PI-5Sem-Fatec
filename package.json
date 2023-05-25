@@ -10,7 +10,10 @@
     "build": "tsc",
     "dev": "nodemon ./src/index.ts",
     "start": "node ./dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "db:createMigration": "cd ./src/database/migration && typeorm migration:create",
+    "db:migrationRun": "npm run build && npx typeorm-ts-node-commonjs migration:run -d src/dataSource.ts"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "mysql": "^2.18.1",
     "typeorm": "^0.3.16"
   },
   "devDependencies": {
