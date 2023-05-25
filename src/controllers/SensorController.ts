@@ -29,8 +29,10 @@ export class SensorController {
       return res.status(400).send("Bad request");
     }
 
+    // Array with the sensors sent from the esp32
     let tmpSensors: SensorModel[] = new Array<SensorModel>();
 
+    // Creating the sensors objects from the model
     for (let i = 0; i < states.length; i++) {
       let tmpSensor: SensorModel = new SensorModel();
       tmpSensor.setId(`${iotId}_${i}`);
@@ -38,6 +40,7 @@ export class SensorController {
       tmpSensors.push(tmpSensor);
     }
 
+    // Updating the database with the generated data
     tmpSensors.forEach(async (sensor) => {
       if (await sensor.updateDatabase()) {
         // TODO: create log system to log instead of console.log
@@ -48,6 +51,5 @@ export class SensorController {
     });
 
     return res.status(200).send(JSON.stringify(tmpSensors));
-
   }
 }
