@@ -1,4 +1,6 @@
 import { DataSource } from "typeorm";
+import { config } from 'dotenv';
+config();   // set env variables from dotenv
 
 export const appDataSource = new DataSource({
     type: "mysql",
@@ -11,5 +13,6 @@ export const appDataSource = new DataSource({
     logging: false,
     entities: [],
     migrations: ["dist/database/migration/*{.ts,.js}"],
-    subscribers: []
+    subscribers: [],
+    ssl: {ca: process.env.MYSQL_SSL_CERT}
 });
