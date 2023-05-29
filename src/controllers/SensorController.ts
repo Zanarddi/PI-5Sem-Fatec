@@ -8,7 +8,7 @@ export class SensorController {
     // this.sensors = new Array<SensorModel>();
   }
 
-  // method thar get the state of the sensors in requisition and updates it in the database
+  // method that get the state of the sensors in requisition and updates it in the database
   public updateSensorState(req: Request, res: Response) {
 
     let iotId : string;

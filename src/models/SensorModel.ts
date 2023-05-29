@@ -1,3 +1,5 @@
+import { appDataSource } from "../database/DataSource";
+
 export interface Sensor {
   id: string;
   state: number;
@@ -13,7 +15,7 @@ export class SensorModel {
 
   // updates the state of the sensor
   // must be called from the controller, and update the database
-  public async updateDatabase(): Promise<boolean> {
+  public async updateDatabase() {
     // TODO: update the database
     // Deve verificar a presença de ambos os atributos antes de atualizar
     // Deve retornar true se atualizou com sucesso, false se não atualizou

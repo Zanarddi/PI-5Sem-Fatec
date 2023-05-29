@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { DataSource, QueryRunner } from "typeorm";
 import express, { Application, NextFunction, Request, Response } from 'express';
 
-import { appDataSource } from "./database/dataSource";
+import { appDataSource } from "./database/DataSource";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
