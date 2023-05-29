@@ -1,5 +1,8 @@
 import { config } from 'dotenv';
+import { DataSource, QueryRunner } from "typeorm";
 import express, { Application, NextFunction, Request, Response } from 'express';
+
+import { appDataSource } from "./database/dataSource";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +17,23 @@ app.use(express.json());
 app.use('/iot', iotRoutes);
 app.use('/mobile', mobileRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+// starting the database and the server
+appDataSource.initialize().then(async (dataSource) => {
+    await dataSource.runMigrations().then(async () => {
+        console.log('Migrations run successfully');
+        app.listen(PORT);
+        console.log(`Server is listening on port ${PORT}`);
+    }).catch((error) => {
+        // catching errors from migrations
+        console.error(error);
+    });
+}).catch((error) => {
+    // catching errors from dataSource initialization
+    console.error(error);
 });
+
+// const queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+// const result = await queryRunner.query(
+//     `SELECT * from migrations;`
+// );
+// await console.log(result);

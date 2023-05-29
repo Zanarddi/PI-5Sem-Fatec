@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "typeorm": "typeorm-ts-node-commonjs",
     "db:createMigration": "cd ./src/database/migration && typeorm migration:create",
-    "db:migrationRun": "npm run build && npx typeorm-ts-node-commonjs migration:run -d src/dataSource.ts"
+    "db:migrationRun": "npm run build && npx typeorm-ts-node-commonjs migration:run -d src/database/dataSource.ts",
+    "db:migrationRevert": "typeorm-ts-node-commonjs migration:revert -d src/database/dataSource.ts"
   },
   "repository": {
     "type": "git",
