@@ -13,6 +13,10 @@ export class ParkingModel {
   constructor() {
   }
 
+  public getId(): string {
+    return this.id;
+  }
+
   public setId(id: string) {
     this.id = id;
   }
