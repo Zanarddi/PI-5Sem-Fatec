@@ -3,7 +3,7 @@ import { ParkingModel } from './ParkingModel';
 export class ParkingPool {
   private static instance: ParkingPool;
 
-  public parkingPool: { [id: string]: ParkingModel };
+  private parkingPool: { [id: string]: ParkingModel };
 
   private constructor() {
     this.parkingPool = {};
