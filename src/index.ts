@@ -25,10 +25,13 @@ appDataSource.initialize().then(async (dataSource) => {
         console.log(`Server is listening on port ${PORT}`);
     }).catch((error) => {
         // catching errors from migrations
+        console.log('Error running migrations');
         console.error(error);
     });
 }).catch((error) => {
     // catching errors from dataSource initialization
+    console.log('Error initializing dataSource');
+    
     console.error(error);
 });
 
