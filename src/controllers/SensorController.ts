@@ -11,22 +11,25 @@ export class SensorController {
   // method that get the state of the sensors in requisition and updates it in the database
   public updateSensorState(req: Request, res: Response) {
 
-    let iotId : string;
-    let states : number[];
-    try {
-      iotId = req.body.device_id;
-      states = req.body.states;
-      if (iotId == undefined || states == undefined) {
-        throw new Error('Bad request');
-      }
-      // console.log('ID = ' + iotId);
-      // console.log('STATES = ' + states);
-    }
-    catch (err) {
-      //send bad request
-      // TODO: log the error
+    var iotId: string;
+    var states: number[];
+
+    var requestBody = req.body;
+    console.log(requestBody);
+
+    if (!requestBody.hasOwnProperty('device_id') || !requestBody.hasOwnProperty('states')) {
       console.log('Bad request');
       return res.status(400).send("Bad request");
+      // TODO: log the error
+    }
+
+    iotId = req.body.device_id;
+    states = req.body.states;
+
+    if (iotId == undefined || states == undefined) {
+      console.log('Bad request 2');
+      return res.status(400).send("Bad request");
+      // TODO: log the error
     }
 
     // Array with the sensors sent from the esp32

@@ -18,22 +18,28 @@ app.use('/iot', iotRoutes);
 app.use('/mobile', mobileRoutes);
 
 // starting the database and the server
-appDataSource.initialize().then(async (dataSource) => {
+appDataSource.initialize().then(async (dataSource: any) => {
     await dataSource.runMigrations().then(async () => {
         console.log('Migrations run successfully');
         app.listen(PORT);
         console.log(`Server is listening on port ${PORT}`);
-    }).catch((error) => {
+    }).catch((error: any) => {
         // catching errors from migrations
         console.log('Error running migrations');
         console.error(error);
     });
-}).catch((error) => {
+}).catch((error: any) => {
     // catching errors from dataSource initialization
     console.log('Error initializing dataSource');
     
     console.error(error);
 });
+
+
+// app.listen(PORT);
+// console.log(`Server is listening on port ${PORT}`);
+
+
 
 // const queryRunner: QueryRunner = await appDataSource.createQueryRunner();
 // const result = await queryRunner.query(
