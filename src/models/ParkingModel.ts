@@ -9,6 +9,7 @@ export interface Parking {
 export class ParkingModel {
   private id!: string;
   private parkingSpots: Array<ParkingSpotModel> = [];
+  private name : string = "NOME TESTE";
   private lastTimeConsulted!: Date;
 
   constructor() {
@@ -23,7 +24,18 @@ export class ParkingModel {
   }
 
   async getParking(){
-    // TODO: get data from database parking
+    // TODO get data from database parking only, and set it to the object
+
+
+    if(await this.getParkingSpots()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
+  async getParkingSpots(){
     let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
     let result = await queryRunner.query(
       `SELECT v.* FROM vaga v, estacionamento e
@@ -38,22 +50,6 @@ export class ParkingModel {
     } else {
       return true;
     }
-
-  }
-  
-  async getParkingSpots(){
-    let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
-    let result = await queryRunner.query(
-      `SELECT v.* FROM vaga v, estacionamento e
-      WHERE v.cod_estacionamento = e.cod_estacionamento
-      AND e.cod_estacionamento = "${this.id}";`
-    );
-    console.log(result.length);
-    
-    // TODO: get data from database parking spots, according to parking id
-    // update this.parkingSpots
-    // !!!! verify the last time the parking was consulted !!!!
-    return true;
   }
 
 }
