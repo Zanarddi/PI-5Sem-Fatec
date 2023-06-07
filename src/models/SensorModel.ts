@@ -1,5 +1,6 @@
 import { appDataSource } from "../database/DataSource";
-
+import { DataSource, QueryRunner } from "typeorm";
+import { sensorLogger } from "../utils/Logger";
 export interface Sensor {
   id: string;
   state: number;
@@ -16,17 +17,32 @@ export class SensorModel {
   // updates the state of the sensor
   // must be called from the controller, and update the database
   public async updateDatabase() {
-    // TODO: update the database
-    // Deve verificar a presença de ambos os atributos antes de atualizar
-    // Deve retornar true se atualizou com sucesso, false se não atualizou
-    return true;
+    let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+    let result = await queryRunner.query(
+      `UPDATE vaga
+      SET ocupado = ${this.state}
+      WHERE cod_sensor = "${this.id}";`
+    );
+    
+    if(result.affectedRows == 1) {
+      sensorLogger.info(`Sensor ${this.id} | atualizado para ${this.state}`);
+      return true;
+    }
+    else if (result.affectedRows == 0){
+      sensorLogger.warning(`Sensor ${this.id} | não encontrado`);
+      return false;
+    }
+    else {
+      sensorLogger.error(`Erro ao atualizar sensor ${this.id}`);
+      return false;
+    }
   }
 
   public setId(id: string) {
     this.id = id;
   }
 
-  public getId() : string {
+  public getId(): string {
     return this.id;
   }
 

@@ -15,7 +15,7 @@ export class SensorController {
     var states: number[];
 
     var requestBody = req.body;
-    console.log(requestBody);
+    // console.log(requestBody);
 
     if (!requestBody.hasOwnProperty('device_id') || !requestBody.hasOwnProperty('states')) {
       console.log('Bad request');
@@ -45,12 +45,7 @@ export class SensorController {
 
     // Updating the database with the generated data
     tmpSensors.forEach(async (sensor) => {
-      if (await sensor.updateDatabase()) {
-        // TODO: create log system to log instead of console.log
-        console.log(`Sensor ${sensor.getId()} updated with state ${sensor.getState()}`);
-      } else {
-        console.log(`Sensor ${sensor.getId()} not updated`);
-      }
+      sensor.updateDatabase();
     });
     return res.status(200).send(JSON.stringify(tmpSensors));
   }

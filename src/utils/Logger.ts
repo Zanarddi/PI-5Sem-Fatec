@@ -44,3 +44,17 @@ export const userLogger = createLogger({
     new transports.File({ filename: `${LOGS_FOLDER}/user.log` })
   ]
 });
+
+export const sensorLogger = createLogger({
+  levels: myLevel.levels,
+  format: combine(
+    label({ label: '' }),
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    myFormat
+  ),
+  transports: [
+    // uncomment this to also log to the console
+    new transports.Console(),
+    new transports.File({ filename: `${LOGS_FOLDER}/sensor.log` })
+  ]
+});
