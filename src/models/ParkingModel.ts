@@ -48,6 +48,7 @@ export class ParkingModel {
     if(result.length <= 0) {
       return false;
     } else {
+      // TODO tratar retiono de dados em getParking
       return true;
     }
   }
