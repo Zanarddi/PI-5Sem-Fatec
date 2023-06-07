@@ -23,7 +23,12 @@ export class ParkingPoolController {
             return res.status(400).send("Bad request");
         }
         // TODO: log the found parking
-        var parking = await ParkingPool.getInstance().getParking(parkingId)
+        var parking = await ParkingPool.getInstance().getParking(parkingId);
+
+        // logging the parking pool for debug
+        console.log(JSON.stringify(ParkingPool.getInstance()));
+        
+        
         return res.status(200).send(JSON.stringify(parking));
     }
 }

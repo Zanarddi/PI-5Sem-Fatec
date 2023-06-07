@@ -58,3 +58,17 @@ export const sensorLogger = createLogger({
     new transports.File({ filename: `${LOGS_FOLDER}/sensor.log` })
   ]
 });
+
+export const parkingLogger = createLogger({
+  levels: myLevel.levels,
+  format: combine(
+    label({ label: '' }),
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    myFormat
+  ),
+  transports: [
+    // uncomment this to also log to the console
+    new transports.Console(),
+    new transports.File({ filename: `${LOGS_FOLDER}/parking.log` })
+  ]
+});

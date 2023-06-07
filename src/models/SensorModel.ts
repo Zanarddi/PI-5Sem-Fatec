@@ -1,5 +1,5 @@
 import { appDataSource } from "../database/DataSource";
-import { DataSource, QueryRunner } from "typeorm";
+import { QueryRunner } from "typeorm";
 import { sensorLogger } from "../utils/Logger";
 export interface Sensor {
   id: string;

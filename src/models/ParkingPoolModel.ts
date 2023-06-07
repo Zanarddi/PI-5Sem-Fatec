@@ -1,4 +1,5 @@
 import { ParkingModel } from './ParkingModel';
+import { parkingLogger } from '../utils/Logger';
 
 export class ParkingPool {
   private static instance: ParkingPool;
@@ -28,9 +29,9 @@ export class ParkingPool {
       
       tmpPaking.setId(id);
       if (!(await tmpPaking.getParking())) {
-        // log that the parking does not exists
+        parkingLogger.error(`Parking ${id} not found`);
       } else {
-        // if true, add the parking to the pool
+        parkingLogger.info(`Parking ${id} found`);
         this.addParking(tmpPaking);
       }
     }
