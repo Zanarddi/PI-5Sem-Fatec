@@ -13,6 +13,5 @@ export const appDataSource = new DataSource({
     logging: false,
     entities: [],
     migrations: ["dist/database/migration/*{.ts,.js}"],
-    subscribers: [],
-    ssl: {ca: process.env.MYSQL_SSL_CERT}
+    subscribers: []
 });
