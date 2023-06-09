@@ -8,27 +8,40 @@ export class ParkingPoolController {
 
     public async getParking(req: Request, res: Response) {
 
-        var parkingId: string;
-        var requestBody = req.body;
+        await req.body.user.getParkings();
 
-        if (!requestBody.hasOwnProperty('parking_id')) {
+        // array of parkings
+        var parkings = [];
+
+        // TODO: log the found parking
+        for (var i = 0; i < req.body.user.parkings.length; i++) {
+            var parking = await ParkingPool.getInstance().getParking(req.body.user.parkings[i]);
+            parkings.push(parking);
+            console.log(`PARKING, DEBUG ONLY -> ` + JSON.stringify(parking));
+        }
+        // logging the parking pool for debug
+        console.log(`PARKING POOL, DEBUG ONLY -> ` + JSON.stringify(ParkingPool.getInstance()));
+
+        return res.status(200).send(parkings);
+    }
+
+    public async getParkingSpots(req: Request, res: Response) {
+
+        var parkingId: string;
+
+        if (!req.body.hasOwnProperty('parking_id')) {
             console.log('Bad request');
             return res.status(400).send("Bad request");
         }
 
         parkingId = req.body.parking_id;
 
-        if (parkingId == undefined) {
-            console.log('Bad request');
-            return res.status(400).send("Bad request");
+        if ((await req.body.user.getParkings()).includes(parseInt(parkingId))) {
+            await (await ParkingPool.getInstance().getParking(parkingId)).getParkingSpots();
+            return res.status(200).send(await ParkingPool.getInstance().getParking(parkingId));
+        } else {
+            return res.status(404).send("Unauthorized");
         }
-        // TODO: log the found parking
-        var parking = await ParkingPool.getInstance().getParking(parkingId);
-
-        // logging the parking pool for debug
-        console.log(JSON.stringify(ParkingPool.getInstance()));
-        
-        
-        return res.status(200).send(JSON.stringify(parking));
     }
+
 }
