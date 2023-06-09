@@ -10,7 +10,7 @@
     "build": "tsc",
     "dev": "nodemon ./src/index.ts",
     "start": "node ./dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "typeorm": "typeorm-ts-node-commonjs",
     "db:createMigration": "cd ./src/database/migration && typeorm migration:create",
     "db:migrationRun": "npm run build && npx typeorm-ts-node-commonjs migration:run -d src/database/DataSource.ts",
