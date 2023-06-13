@@ -1,5 +1,6 @@
 import { appDataSource } from '../database/DataSource';
 import { QueryRunner } from "typeorm";
+import { userLogger } from '../utils/Logger';
 
 export class UserModel {
     private id !: string;
@@ -12,19 +13,25 @@ export class UserModel {
     }
 
     public async getInfo() {
-        // TODO get data from database parking only, and set it to the object
-
         let queryRunner: QueryRunner = appDataSource.createQueryRunner();
         let result = await queryRunner.query(
             `SELECT u.* FROM usuario u
             WHERE u.email = "${this.email}";`
         );
         if (result.length <= 0) {
+            userLogger.error(`user ${this.email} not found`);
             return false;
         }
         this.id = result[0].cod_usuario;
         this.email = result[0].email;
-        this.name = result[0].nome;
+        this.name = result[0].usuario;
+        userLogger.info(`user ${this.email} authenticated`);
+        return true;
+    }
+
+    public async auth() {
+        // TODO implement firebase auth
+        userLogger.info(`user ${this.email} authenticated`);
         return true;
     }
 
@@ -34,13 +41,13 @@ export class UserModel {
             `SELECT cod_estacionamento FROM participacao
             WHERE cod_usuario = "${this.id}";`
         );
-        
+
         if (result.length <= 0) {
             return [];
         }
         for (let i = 0; i < result.length; i++) {
             this.parkings.push(result[i].cod_estacionamento);
-        }  
+        }
         return this.parkings;
     }
 }

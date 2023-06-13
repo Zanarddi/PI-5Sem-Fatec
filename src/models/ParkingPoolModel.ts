@@ -28,16 +28,14 @@ export class ParkingPool {
       var tmpPaking = new ParkingModel();
 
       tmpPaking.setId(id);
-      if (!(await tmpPaking.getParking())) {
-        parkingLogger.error(`Parking ${id} not found`);
-      } else {
-        parkingLogger.info(`Parking ${id} found`);
+      if (await tmpPaking.getParking()) {
         this.addParking(tmpPaking);
       }
-    } else {
-      //TODO test if the parking was updated recently and update it if not, then return it
-      await this.parkingPool[id].getParking();
-    }
+    } 
+    // else {
+    //   //TODO test if the parking was updated recently and update it if not, then return it
+    //   //await this.parkingPool[id].getParking();
+    // }
     // return the parking, if it was not found, it will return undefined
     return this.parkingPool[id];
   }
