@@ -26,7 +26,7 @@ export class ParkingPool {
     if (!this.parkingPool.hasOwnProperty(id)) {
       // if false, test if the parking exists in the database
       var tmpPaking = new ParkingModel();
-      
+
       tmpPaking.setId(id);
       if (!(await tmpPaking.getParking())) {
         parkingLogger.error(`Parking ${id} not found`);
@@ -34,6 +34,9 @@ export class ParkingPool {
         parkingLogger.info(`Parking ${id} found`);
         this.addParking(tmpPaking);
       }
+    } else {
+      //TODO test if the parking was updated recently and update it if not, then return it
+      await this.parkingPool[id].getParking();
     }
     // return the parking, if it was not found, it will return undefined
     return this.parkingPool[id];

@@ -1,6 +1,5 @@
 import { config } from 'dotenv';
-import { DataSource, QueryRunner } from "typeorm";
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import { authenticate } from './middlewares/authMiddleware';
 import { appDataSource } from "./database/DataSource";
 
