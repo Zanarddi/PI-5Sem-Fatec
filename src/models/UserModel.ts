@@ -1,6 +1,7 @@
 import { appDataSource } from '../database/DataSource';
 import { QueryRunner } from "typeorm";
 import { userLogger } from '../utils/Logger';
+const admin = require("firebase-admin");
 
 export class UserModel {
     private id !: string;
@@ -10,6 +11,10 @@ export class UserModel {
 
     constructor(email: string) {
         this.email = email;
+    }
+
+    public async setName(name: string) {
+        this.name = name;
     }
 
     public async getInfo() {
@@ -29,10 +34,37 @@ export class UserModel {
         return true;
     }
 
-    public async auth() {
-        // TODO implement firebase auth
-        userLogger.info(`user ${this.email} authenticated`);
+    public async create() {
+        let queryRunner: QueryRunner = appDataSource.createQueryRunner();
+        let result = await queryRunner.query(
+            `INSERT INTO usuario (usuario, email)
+            VALUES ("${this.name}", "${this.email}");`
+        );
+        if (result.length <= 0) {
+            userLogger.error(`user ${this.email} not found`);
+            return false;
+        }
+        userLogger.info(`user ${this.email} created`);
         return true;
+    }
+
+    public async auth(token: string) {
+        return await admin.auth().verifyIdToken(token)
+            .then((decodedToken: any) => {
+                if (decodedToken.email != this.email) {
+                    userLogger.error(`user ${this.email} not authenticated`);
+                    return false;
+                }
+                else{
+                    this.name = decodedToken.name;
+                    userLogger.info(`user ${this.email} authenticated`);
+                    return true;
+                }
+            })
+            .catch((error: any) => {
+                userLogger.error(`user ${this.email} not authenticated`);
+                return false;
+            });
     }
 
     public async getParkings() {
