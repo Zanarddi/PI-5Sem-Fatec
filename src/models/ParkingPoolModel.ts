@@ -26,16 +26,23 @@ export class ParkingPool {
     if (!this.parkingPool.hasOwnProperty(id)) {
       // if false, test if the parking exists in the database
       var tmpPaking = new ParkingModel();
-      
+
       tmpPaking.setId(id);
-      if (!(await tmpPaking.getParking())) {
-        parkingLogger.error(`Parking ${id} not found`);
-      } else {
-        parkingLogger.info(`Parking ${id} found`);
+      if (await tmpPaking.getParking()) {
         this.addParking(tmpPaking);
       }
+    } 
+    else {
+      //TODO test if the parking was updated recently and update it if not, then return it, in the las 15 seconds
+      if (this.parkingPool[id].getLastTimeConsulted().getSeconds() < new Date().getSeconds() - 15) {
+        parkingLogger.info(`Parking ${id} retrieved from the database`);
+        await this.parkingPool[id].getParking();
+      }
+      else{
+        console.log('inside the else');
+        parkingLogger.info(`Parking ${id} retrieved from the pool`);
+      }
     }
-    // return the parking, if it was not found, it will return undefined
     return this.parkingPool[id];
   }
 }

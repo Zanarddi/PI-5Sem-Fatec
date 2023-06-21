@@ -5,7 +5,7 @@ export class UserController {
     }
 
     public async getUser(email : string) : Promise<UserModel>{
-        var tmpUser = new UserModel(email);
+        let tmpUser = new UserModel(email);
         return tmpUser;
     }
 

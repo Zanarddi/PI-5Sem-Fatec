@@ -1,8 +1,15 @@
 import { config } from 'dotenv';
-import { DataSource, QueryRunner } from "typeorm";
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import { authenticate } from './middlewares/authMiddleware';
 import { appDataSource } from "./database/DataSource";
+const admin = require("firebase-admin");
+
+var cors = require('cors')
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY!);
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -11,8 +18,10 @@ const iotRoutes = require('./routes/iot/IoTRoutes');
 const mobileRoutes = require('./routes/mobile/MobileRoutes');
 
 config();   // set env variables from dotenv
-app.use(express.json());
 
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
 app.use(authenticate); // authentication middleware
 
 // assigning routes to the route files
