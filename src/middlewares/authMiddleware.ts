@@ -12,8 +12,6 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
     if (req.path.startsWith('/iot')) {
         return next();
     }
-
-    console.log(req.body);
     // Check if the request has the email field
     if (!req.body.hasOwnProperty('email')) {
         console.log('Bad request');

@@ -2,6 +2,7 @@ import { appDataSource } from '../database/DataSource';
 import { QueryRunner } from "typeorm";
 import { ParkingSpotModel } from './ParkingSpotModel';
 import { parkingLogger } from '../utils/Logger';
+const TIME_TO_UPDATE = 5000;
 
 export interface Parking {
   // TODO: define the parking interface
@@ -52,7 +53,7 @@ export class ParkingModel {
   }
 
   async getParkingSpots() {
-    if (this.lastTimeConsultedSpots == undefined || this.lastTimeConsultedSpots.getSeconds() < new Date().getSeconds() - 15) {
+    if (this.lastTimeConsultedSpots == undefined || this.lastTimeConsultedSpots.valueOf() - new Date().valueOf() < TIME_TO_UPDATE) {
       let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
       await queryRunner.connect();
       let result = await queryRunner.query(
@@ -77,8 +78,10 @@ export class ParkingModel {
     }
   }
 
-
   public getLastTimeConsulted(): Date {
     return this.lastTimeConsulted;
+  }
+  public setLastTimeConsulted(lastTimeConsulted: Date) {
+    this.lastTimeConsulted = lastTimeConsulted;
   }
 }
