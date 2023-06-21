@@ -23,14 +23,19 @@ export class UserModel {
         await queryRunner.connect();
         let result = await queryRunner.query(
             `INSERT INTO participacao (cod_usuario, cod_estacionamento, tipo_participacao)
-            VALUES ("${this.id}", "${parkingId}", "usuario");`
-        );
+            VALUES (${this.id}, ${parkingId}, "usuario");`
+        ).catch((err) => {
+            userLogger.error(`user ${this.email} tried to add ${parkingId} unsuccessfully, MySQL error: ${err.errno}`);
+        });
         await queryRunner.release();
-        if (result.length <= 0) {
-            userLogger.error(`user ${this.email} not created`);
+        if(result == undefined){
             return false;
         }
-        userLogger.info(`user ${this.email} created`);
+        if (result.length <= 0) {
+            userLogger.error(`user ${this.email} not added to parking ${parkingId}`);
+            return false;
+        }
+        userLogger.info(`user ${this.email} added to parking ${parkingId}`);
         return true;
     }
 

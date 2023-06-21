@@ -1,4 +1,5 @@
 import { UserModel } from '../models/UserModel';
+import { Request, Response } from 'express';
 
 export class UserController {
     constructor() {
@@ -14,5 +15,13 @@ export class UserController {
             return true;
         }
         return false;
+    }
+
+    public async addParking(req: Request, res: Response) {
+        if(await req.body.user.addToParking(req.body.parking_id)){
+            return res.status(200).send('added');
+        } else {
+            return res.status(400).send('error');
+        }
     }
 }
