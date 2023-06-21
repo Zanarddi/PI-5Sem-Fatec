@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import express, { Application } from 'express';
 import { authenticate } from './middlewares/authMiddleware';
 import { appDataSource } from "./database/DataSource";
-import { initializeApp } from 'firebase-admin/app';
 const admin = require("firebase-admin");
 
 var cors = require('cors')
@@ -22,7 +21,7 @@ config();   // set env variables from dotenv
 
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static('public'));
 app.use(authenticate); // authentication middleware
 
 // assigning routes to the route files

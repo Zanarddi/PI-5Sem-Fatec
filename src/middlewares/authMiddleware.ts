@@ -29,7 +29,6 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
 
     if(await tmpUser.auth(req.body.token)) {
         if(await tmpUser.getInfo()){
-            console.log(`temp user: ${JSON.stringify(tmpUser)}`);
             req.body.user = tmpUser;
             return next();
         }

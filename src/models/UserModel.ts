@@ -17,31 +17,59 @@ export class UserModel {
         this.name = name;
     }
 
+    public async addToParking(parkingId: string) {
+
+        let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+        await queryRunner.connect();
+        let result = await queryRunner.query(
+            `INSERT INTO participacao (cod_usuario, cod_estacionamento, tipo_participacao)
+            VALUES ("${this.id}", "${parkingId}", "usuario");`
+        );
+        await queryRunner.release();
+        if (result.length <= 0) {
+            userLogger.error(`user ${this.email} not created`);
+            return false;
+        }
+        userLogger.info(`user ${this.email} created`);
+        return true;
+    }
+
     public async getInfo() {
-        let queryRunner: QueryRunner = appDataSource.createQueryRunner();
+        let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+        await queryRunner.connect();
         let result = await queryRunner.query(
             `SELECT u.* FROM usuario u
             WHERE u.email = "${this.email}";`
-        );
+        ).catch((err) => {
+            console.log(err);
+        });
+        await queryRunner.release();
+
         if (result.length <= 0) {
             userLogger.error(`user ${this.email} not found`);
             return false;
         }
+
+
         this.id = result[0].cod_usuario;
         this.email = result[0].email;
         this.name = result[0].usuario;
+        console.log(this);
+
         userLogger.info(`user ${this.email} authenticated`);
         return true;
     }
 
     public async create() {
-        let queryRunner: QueryRunner = appDataSource.createQueryRunner();
+        let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+        await queryRunner.connect();
         let result = await queryRunner.query(
             `INSERT INTO usuario (usuario, email)
             VALUES ("${this.name}", "${this.email}");`
         );
+        await queryRunner.release();
         if (result.length <= 0) {
-            userLogger.error(`user ${this.email} not found`);
+            userLogger.error(`user ${this.email} not created`);
             return false;
         }
         userLogger.info(`user ${this.email} created`);
@@ -55,7 +83,7 @@ export class UserModel {
                     userLogger.error(`user ${this.email} not authenticated`);
                     return false;
                 }
-                else{
+                else {
                     this.name = decodedToken.name;
                     userLogger.info(`user ${this.email} authenticated`);
                     return true;
@@ -69,11 +97,12 @@ export class UserModel {
 
     public async getParkings() {
         let queryRunner: QueryRunner = await appDataSource.createQueryRunner();
+        await queryRunner.connect();
         let result = await queryRunner.query(
             `SELECT cod_estacionamento FROM participacao
             WHERE cod_usuario = "${this.id}";`
         );
-
+        await queryRunner.release();
         if (result.length <= 0) {
             return [];
         }

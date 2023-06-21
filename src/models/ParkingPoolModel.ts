@@ -32,11 +32,17 @@ export class ParkingPool {
         this.addParking(tmpPaking);
       }
     } 
-    // else {
-    //   //TODO test if the parking was updated recently and update it if not, then return it
-    //   //await this.parkingPool[id].getParking();
-    // }
-    // return the parking, if it was not found, it will return undefined
+    else {
+      //TODO test if the parking was updated recently and update it if not, then return it, in the las 15 seconds
+      if (this.parkingPool[id].getLastTimeConsulted().getSeconds() < new Date().getSeconds() - 15) {
+        parkingLogger.info(`Parking ${id} retrieved from the database`);
+        await this.parkingPool[id].getParking();
+      }
+      else{
+        console.log('inside the else');
+        parkingLogger.info(`Parking ${id} retrieved from the pool`);
+      }
+    }
     return this.parkingPool[id];
   }
 }
