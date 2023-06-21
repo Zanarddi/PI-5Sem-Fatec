@@ -1,5 +1,6 @@
 import { ParkingModel } from './ParkingModel';
 import { parkingLogger } from '../utils/Logger';
+const TIME_TO_UPDATE = 5000;
 
 export class ParkingPool {
   private static instance: ParkingPool;
@@ -33,14 +34,18 @@ export class ParkingPool {
       }
     } 
     else {
-      //TODO test if the parking was updated recently and update it if not, then return it, in the las 15 seconds
-      if (this.parkingPool[id].getLastTimeConsulted().getSeconds() < new Date().getSeconds() - 15) {
+      //TODO test if the parking was updated recently and update it if not, then return it, in the last 5 seconds
+      if ((this.parkingPool[id].getLastTimeConsulted().valueOf() - new Date().valueOf()) < TIME_TO_UPDATE) {
         parkingLogger.info(`Parking ${id} retrieved from the database`);
         await this.parkingPool[id].getParking();
+        this.parkingPool[id].setLastTimeConsulted(new Date());
+
       }
       else{
-        console.log('inside the else');
         parkingLogger.info(`Parking ${id} retrieved from the pool`);
+        console.log(this.parkingPool[id].getLastTimeConsulted().valueOf() - new Date().valueOf());
+        
+        
       }
     }
     return this.parkingPool[id];

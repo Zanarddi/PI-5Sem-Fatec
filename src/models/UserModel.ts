@@ -54,7 +54,6 @@ export class UserModel {
         this.id = result[0].cod_usuario;
         this.email = result[0].email;
         this.name = result[0].usuario;
-        console.log(this);
 
         userLogger.info(`user ${this.email} authenticated`);
         return true;
